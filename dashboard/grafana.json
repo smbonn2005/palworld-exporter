@@ -1871,5 +1871,6 @@
   "uid": null,
   "version": 71,
   "weekStart": "",
-  "description": "A Palworld dedicated server dashboard for metrics exported by https://github.com/smbonn2005/palworld-exporter."
+  "description": "A Palworld dedicated server dashboard for metrics exported by https://github.com/smbonn2005/palworld-exporter.",
+  "gnetId": 25672
 }

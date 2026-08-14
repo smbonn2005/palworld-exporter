@@ -1,11 +1,11 @@
 # Prometheus Exporter for Palworld Server
 
-*Developed by https://palworld.lol/*
+*Developed by https://palworld.lol/*, refactored and maintained by @smbonn2005
 
 [![Container Image](https://img.shields.io/badge/ghcr.io-palworld--exporter-blue?logo=github)](https://github.com/smbonn2005/palworld-exporter/pkgs/container/palworld-exporter)
 ![GitHub License](https://img.shields.io/github/license/smbonn2005/palworld-exporter)
 
-Here is a screenshot of what's possible to graph using metrics from this exporter. This Grafana dashboard can be [downloaded here](https://grafana.com/grafana/dashboards/20421-palworld/).
+Here is a screenshot of what's possible to graph using metrics from this exporter. This Grafana dashboard can be [downloaded here](https://grafana.com/grafana/dashboards/25672-palworld/).
 
 ![Grafana Screenshot](grafana.png)
 
