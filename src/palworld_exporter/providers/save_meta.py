@@ -4,6 +4,7 @@ from glob import glob
 from typing import Iterable
 
 from palworld_exporter.providers.data import SaveInformation
+from palworld_exporter.providers.util import hex_uid_to_decimal
 
 """
 Provide metadata about the files in the game save directory.
@@ -34,7 +35,7 @@ class PlayerSaveFileProvider:
 
     def convert_filename_to_player_uid(self, filename: str) -> str:
         try:
-            return str(int(filename[:8], 16))
+            return hex_uid_to_decimal(filename)
         except Exception as e:
             logging.error(
                 f'Error converting player save filename to player uid: {filename}', e)

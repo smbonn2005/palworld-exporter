@@ -2,10 +2,8 @@
 
 *Developed by https://palworld.lol/*
 
-![Docker Image Version (tag latest semver)](https://img.shields.io/docker/v/bostrt/palworld-exporter/latest?logo=docker&label=Docker)
-![Docker Image Size (tag)](https://img.shields.io/docker/image-size/bostrt/palworld-exporter/latest?logo=docker)
-![Docker Pulls](https://img.shields.io/docker/pulls/bostrt/palworld-exporter?logo=docker)
-![GitHub License](https://img.shields.io/github/license/palworldlol/palworld-exporter)
+[![Container Image](https://img.shields.io/badge/ghcr.io-palworld--exporter-blue?logo=github)](https://github.com/smbonn2005/palworld-exporter/pkgs/container/palworld-exporter)
+![GitHub License](https://img.shields.io/github/license/smbonn2005/palworld-exporter)
 
 Here is a screenshot of what's possible to graph using metrics from this exporter. This Grafana dashboard can be [downloaded here](https://grafana.com/grafana/dashboards/20421-palworld/).
 
@@ -17,8 +15,13 @@ This project contains a [Prometheus Exporter](https://prometheus.io/docs/instrum
 | name | description | labels | metric type |
 |------|-------------|--------|-------------|
 | `palworld_player_count` | The current number of players on given server | no extra labels | Gauge |
-| `palworld_player` | A player currently logged into the server | Character name, Player UID, and Steam ID | Gauge |
+| `palworld_player` | A player currently logged into the server | Character name, User ID, and Player UID | Gauge |
+| `palworld_player_max` | Maximum player capacity configured on the server | no extra labels | Gauge |
 | `palworld_server_info` | Server Information | Server name, Version | Gauge |
+| `palworld_server_fps` | Current server FPS | no extra labels | Gauge |
+| `palworld_server_frametime_milliseconds` | Current server frame time in milliseconds | no extra labels | Gauge |
+| `palworld_uptime_seconds` | Server uptime in seconds since last restart | no extra labels | Gauge |
+| `palworld_world_days` | Elapsed in-game days | no extra labels | Gauge |
 | `palworld_up` | Indicator if last metric scrape was successful | no extra labels | Gauge |
 | `palworld_player_save_count` | Number of player save files on disk. Only included if `--save-directory` specified. | no extra labels | Gauge |
 | `palworld_player_save_size_bytes` | File size of a player save file in bytes | filename and player UID | Gauge
@@ -27,18 +30,20 @@ This project contains a [Prometheus Exporter](https://prometheus.io/docs/instrum
 
 *For more information of [Gauges see here](https://prometheus.io/docs/concepts/metric_types/#gauge).*
 
+All of the metrics above, other than the `palworld_player_save_*`/`palworld_level_save_*` file metrics, are gathered via the Palworld [REST API](https://docs.palworldgame.com/api/rest-api/palwold-rest-api/), which must be enabled on your server (`RESTAPIEnabled=True` in `PalWorldSettings.ini`). This exporter no longer supports RCON — Palworld has deprecated RCON in favor of the REST API and plans to remove it in a future update.
+
 # Options
 
 Environment Variables are available:
 
-- `RCON_HOST`
-- `RCON_PORT`
-- `RCON_PASSWORD`
+- `REST_HOST`
+- `REST_PORT`
+- `REST_PASSWORD`
+- `REST_USE_TLS`
 - `LISTEN_ADDRESS`
 - `LISTEN_PORT`
 - `SAVE_DIRECTORY`
 - `LOG_LEVEL`
-- `IGNORE_LOGGING_IN`
 
 # Run normally with Pip package
 
@@ -53,7 +58,7 @@ Below is the command to run straight with docker (podman works too!).
 *NOTE*: You will need to make sure the exporter can reach the Palworld server you wish to monitor.
 
 ```
-docker run -e RCON_HOST=palworld -e RCON_PASSWORD=topsecrt -e SAVE_DIRECTORY=/palworld -v ./palworld:/palworld:z,ro -p 9877:9877 --rm -it docker.io/bostrt/palworld-exporter
+docker run -e REST_HOST=palworld -e REST_PASSWORD=topsecrt -e SAVE_DIRECTORY=/palworld -v ./palworld:/palworld:z,ro -p 9877:9877 --rm -it ghcr.io/smbonn2005/palworld-exporter
 ```
 
 ## Docker Compose
@@ -62,15 +67,15 @@ Here is an EXAMPLE docker compose file that uses a https://github.com/thijsvanlo
 
 ⚠️ *Note*: PLEASE check the README on https://github.com/thijsvanloef/palworld-server-docker and don't just copy paste this. 
 
-- Notice the `RCON_PASSWORD` and `ADMIN_PASSWORD` match. 
+- Notice the `REST_PASSWORD` and `ADMIN_PASSWORD` match. 
 - Notice the exporter references `palworld`, the name of the Docker compose service.
-- Notice the `RCON_PORT` in both services match.
+- Notice the `REST_PORT` in the exporter matches `REST_API_PORT` in the game server.
 - Lastly, the `palworld` volume is used in both containers.
 
 ```yaml
 services:
   exporter:
-    image: docker.io/bostrt/palworld-exporter:latest
+    image: ghcr.io/smbonn2005/palworld-exporter:latest
     restart: unless-stopped
     container_name: exporter
     ports:
@@ -78,9 +83,9 @@ services:
     depends_on:
       - palworld
     environment:
-      - RCON_HOST=palworld
-      - RCON_PORT=25575
-      - RCON_PASSWORD=top-secret
+      - REST_HOST=palworld
+      - REST_PORT=8212
+      - REST_PASSWORD=top-secret
       - SAVE_DIRECTORY=/palworld
     volumes:
       - ./palworld:/palworld/:z,ro
@@ -96,8 +101,8 @@ services:
          - PORT=8211
          - PLAYERS=16
          - MULTITHREADING=true
-         - RCON_ENABLED=true
-         - RCON_PORT=25575
+         - REST_API_ENABLED=true
+         - REST_API_PORT=8212
          - ADMIN_PASSWORD=top-secret
       volumes:
          - ./palworld:/palworld/:z
@@ -113,11 +118,24 @@ palworld_server_info{name="My Palworld",version="0.1.4.1"} 1.0
 palworld_player_count 2.0
 # HELP palworld_player Palworld player information
 # TYPE palworld_player gauge
-palworld_player{name="vince",player_uid="326323370",steam_id="2222222"} 1.0
-palworld_player{name="shlomi",player_uid="1965487011",steam_id="333333"} 1.0
-# HELP palworld_player Palworld player information
-# TYPE palworld_player gauge
-# HELP palworld_up Was the last scrape of RCON successful
+palworld_player{name="vince",player_uid="326323370",user_id="steam_2222222"} 1.0
+palworld_player{name="shlomi",player_uid="1965487011",user_id="steam_333333"} 1.0
+# HELP palworld_player_max Maximum player capacity configured on the server
+# TYPE palworld_player_max gauge
+palworld_player_max 32.0
+# HELP palworld_server_fps Current server FPS
+# TYPE palworld_server_fps gauge
+palworld_server_fps 57.0
+# HELP palworld_server_frametime_milliseconds Current server frame time in milliseconds
+# TYPE palworld_server_frametime_milliseconds gauge
+palworld_server_frametime_milliseconds 16.7671
+# HELP palworld_uptime_seconds Server uptime in seconds since last restart
+# TYPE palworld_uptime_seconds gauge
+palworld_uptime_seconds 3600.0
+# HELP palworld_world_days Elapsed in-game days
+# TYPE palworld_world_days gauge
+palworld_world_days 1.0
+# HELP palworld_up Was the last scrape of the REST API successful
 # TYPE palworld_up gauge
 palworld_up 1.0
 # HELP palworld_player_save_size_bytes File size of a player save file in bytes

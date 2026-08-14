@@ -154,3 +154,6 @@ dmypy.json
 cython_debug/
 
 .vscode/
+
+# Claude Code project instructions (local guidance, not for the repo)
+CLAUDE.md
