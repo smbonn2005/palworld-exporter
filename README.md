@@ -45,10 +45,6 @@ Environment Variables are available:
 - `SAVE_DIRECTORY`
 - `LOG_LEVEL`
 
-# Run normally with Pip package
-
-*TODO*
-
 # Run as Container
 
 ## Just Docker

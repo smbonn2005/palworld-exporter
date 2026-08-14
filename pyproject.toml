@@ -10,10 +10,12 @@ keywords = ["palworld", "prometheus", "exporter"]
 
 authors = [
     { name = "Robert Bost", email = "bostrt@gmail.com" },
+    { name = "Stephen Bonnell", email = "stephen@smbonn.me" },
 ]
 
 maintainers = [
     { name = "Robert Bost", email = "bostrt@gmail.com" },
+    { name = "Stephen Bonnell", email = "stephen@smbonn.me" },
 ]
 
 # Classifiers help users find your project by categorizing it.
@@ -46,7 +48,6 @@ dependencies = [ # Optional
 ]
 
 [project.optional-dependencies]
-dev = ["check-manifest"]
 test = ["flake8", "coverage", "pytest", "pyfakefs"]
 
 [project.urls]
