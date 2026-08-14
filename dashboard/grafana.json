@@ -756,8 +756,8 @@
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 0,
-        "y": 8
+        "x": 12,
+        "y": 24
       },
       "id": 2,
       "options": {
@@ -839,8 +839,8 @@
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 12,
-        "y": 8
+        "x": 0,
+        "y": 48
       },
       "id": 16,
       "options": {
@@ -977,7 +977,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 16
+        "y": 32
       },
       "id": 1,
       "options": {
@@ -1059,7 +1059,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 16
+        "y": 40
       },
       "id": 17,
       "options": {
@@ -1126,8 +1126,8 @@
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 0,
-        "y": 24
+        "x": 12,
+        "y": 32
       },
       "id": 8,
       "options": {
@@ -1232,8 +1232,8 @@
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 12,
-        "y": 24
+        "x": 0,
+        "y": 40
       },
       "id": 14,
       "options": {
@@ -1336,8 +1336,8 @@
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 0,
-        "y": 32
+        "x": 12,
+        "y": 16
       },
       "id": 3,
       "options": {
@@ -1444,7 +1444,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 32
+        "y": 48
       },
       "id": 7,
       "options": {
@@ -1515,8 +1515,8 @@
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 12,
-        "y": 40
+        "x": 0,
+        "y": 24
       },
       "id": 4,
       "options": {
@@ -1624,7 +1624,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 40
+        "y": 8
       },
       "id": 23,
       "options": {
@@ -1723,8 +1723,8 @@
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 0,
-        "y": 48
+        "x": 12,
+        "y": 8
       },
       "id": 24,
       "options": {
@@ -1820,8 +1820,8 @@
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 12,
-        "y": 48
+        "x": 0,
+        "y": 16
       },
       "id": 25,
       "options": {
@@ -1869,7 +1869,7 @@
   "timezone": "",
   "title": "Palworld",
   "uid": null,
-  "version": 70,
+  "version": 71,
   "weekStart": "",
   "description": "A Palworld dedicated server dashboard for metrics exported by https://github.com/smbonn2005/palworld-exporter."
 }
